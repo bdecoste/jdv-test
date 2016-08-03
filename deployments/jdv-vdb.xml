@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vdb name="jdv" version="1">
+	<description />
+	<property name="validationDateTime" value="Wed Aug 03 15:09:43 PDT 2016" />
+	<property name="validationVersion" value="8.12.5" />
+	<model name="CustomeView" type="VIRTUAL">
+		<metadata type="DDL"><![CDATA[
+CREATE VIEW CUSTOMER (
+	FIRSTNAME string(64) OPTIONS(NAMEINSOURCE 'firstname'),
+	LASTNAME string(64) OPTIONS(NAMEINSOURCE 'lastname')
+) OPTIONS(NAMEINSOURCE 'customer') 
+AS
+		SELECT
+		PG_SOURCE.customer.firstname, PG_SOURCE.customer.lastname
+	FROM
+		PG_SOURCE.customer
+UNION ALL
+SELECT
+		MS_SOURCE.CUSTOMER.FIRSTNAME, MS_SOURCE.CUSTOMER.LASTNAME
+	FROM
+		MS_SOURCE.CUSTOMER;
+
+]]></metadata>
+	</model>
+	<model name="PG_SOURCE">
+		<source connection-jndi-name="java:/postgresql-ds" name="PG_SOURCE"
+			translator-name="postgresql" />
+		<metadata type="DDL"><![CDATA[
+CREATE FOREIGN TABLE customer (
+	ssn string(10) NOT NULL OPTIONS(NAMEINSOURCE '"ssn"', NATIVE_TYPE 'bpchar', FIXED_LENGTH 'TRUE'),
+	firstname string(64) OPTIONS(NAMEINSOURCE '"firstname"', NATIVE_TYPE 'varchar'),
+	lastname string(64) OPTIONS(NAMEINSOURCE '"lastname"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT customer_pk PRIMARY KEY(ssn)
+) OPTIONS(NAMEINSOURCE '"public"."customer"')
+
+CREATE FOREIGN TABLE pgtable1 (
+	id integer NOT NULL OPTIONS(NAMEINSOURCE '"id"', NATIVE_TYPE 'serial', FIXED_LENGTH 'TRUE'),
+	field1 string(64) OPTIONS(NAMEINSOURCE '"field1"', NATIVE_TYPE 'varchar'),
+	field2 string(64) OPTIONS(NAMEINSOURCE '"field2"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT pgtable1_pk PRIMARY KEY(id)
+) OPTIONS(NAMEINSOURCE '"public"."pgtable1"')
+
+]]></metadata>
+	</model>
+	<model name="MS_SOURCE">
+		<source connection-jndi-name="java:/mysql-ds" name="MS_SOURCE"
+			translator-name="mysql5" />
+		<metadata type="DDL"><![CDATA[
+CREATE FOREIGN TABLE CUSTOMER (
+	SSN string(10) NOT NULL DEFAULT OPTIONS(NAMEINSOURCE '`SSN`', NATIVE_TYPE 'CHAR', FIXED_LENGTH 'TRUE'),
+	FIRSTNAME string(64) OPTIONS(NAMEINSOURCE '`FIRSTNAME`', NATIVE_TYPE 'VARCHAR'),
+	LASTNAME string(64) OPTIONS(NAMEINSOURCE '`LASTNAME`', NATIVE_TYPE 'VARCHAR'),
+	CONSTRAINT PRIMARY PRIMARY KEY(SSN)
+) OPTIONS(NAMEINSOURCE '`jdv`.`CUSTOMER`')
+
+CREATE FOREIGN TABLE MSTABLE1 (
+	ID long NOT NULL OPTIONS(NAMEINSOURCE '`ID`', NATIVE_TYPE 'BIGINT UNSIGNED', FIXED_LENGTH 'TRUE'),
+	FIELD1 string(64) OPTIONS(NAMEINSOURCE '`FIELD1`', NATIVE_TYPE 'VARCHAR'),
+	FIELD2 string(64) OPTIONS(NAMEINSOURCE '`FIELD2`', NATIVE_TYPE 'VARCHAR'),
+	CONSTRAINT PRIMARY PRIMARY KEY(ID)
+) OPTIONS(NAMEINSOURCE '`jdv`.`MSTABLE1`')
+
+]]></metadata>
+	</model>
+</vdb>
