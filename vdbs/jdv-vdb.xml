@@ -4,6 +4,9 @@
 	<property name="validationDateTime" value="Wed Aug 03 15:09:43 PDT 2016" />
 	<property name="validationVersion" value="8.12.5" />
 	<model name="CustomeView" type="VIRTUAL">
+		
+		<property name="importer.useFullSchemaName" value="false"/>
+		
 		<metadata type="DDL"><![CDATA[
 CREATE VIEW CUSTOMER (
 	FIRSTNAME string(64) OPTIONS(NAMEINSOURCE 'firstname'),
