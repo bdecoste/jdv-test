@@ -27,7 +27,7 @@ SELECT
 	</model>
 	<model name="PG_SOURCE">
 		<source connection-jndi-name="java:/postgresql-ds" name="PG_SOURCE"
-			translator-name="translator-test" />
+			translator-name="postgresql" />
 		<metadata type="DDL"><![CDATA[
 CREATE FOREIGN TABLE customer (
 	ssn string(10) NOT NULL OPTIONS(NAMEINSOURCE '"ssn"', NATIVE_TYPE 'bpchar', FIXED_LENGTH 'TRUE'),
@@ -58,8 +58,8 @@ CREATE FOREIGN TABLE CUSTOMER (
 
 ]]></metadata>
 	</model>
-    <translator name="translator-test" type="test">
+    <!--translator name="translator-test" type="test">
         <property name="SupportsNativeQueries" value="true"/>
-    </translator>
+    </translator-->
   
 </vdb>
